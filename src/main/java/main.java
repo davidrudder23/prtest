@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class main {
     public static void main(String[] args) throws IOException {
         ArrayList<FordDealer> fordDealers = FordDealerInformation.loadFordData();
-
+        
         for (FordDealer fordDealer : fordDealers) {
             fordDealer.setLonLatZip(LonLatLocator.getWithZipCode(fordDealer.getZipCode()));
         }
