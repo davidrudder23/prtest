@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class LonLatLocator {
     private final static InputStream UsZipCodes = LonLatLocator.class.getClassLoader().getResourceAsStream("USZipCodesfrom2013GovernmentData.txt");
 
-
     /**
      * Currently return a single Location.LonLatZip. Eventually the goal
      * is to return an array of all desired values based on

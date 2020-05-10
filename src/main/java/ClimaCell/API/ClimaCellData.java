@@ -25,8 +25,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
             "&fields=precipitation" +
             ",temp" +
             ",weather_code" +
-            ",precipitation_accumulation" +
-            ",precipitation";
+            ",precipitation_accumulation";
 
     private final static String climateCellKey = "&apikey=1h0MB1CLlmZBNEeSaxl8nstk296WD0UV";
 

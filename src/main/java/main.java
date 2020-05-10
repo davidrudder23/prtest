@@ -13,6 +13,7 @@ public class main {
             fordDealer.setLonLatZip(LonLatLocator.getWithZipCode(fordDealer.getZipCode()));
         }
 
+        Excel.generateNewWeatherTemplate(fordDealers);
 
 
 //        long startTime = System.nanoTime();
