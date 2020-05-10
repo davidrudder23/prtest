@@ -1,3 +1,5 @@
+import ClimaCell.Model.WeatherCode;
+import ClimaCell.WeatherCodes;
 import Ford.FordDealer;
 import Time.GenerateTime;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -9,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import static ClimaCell.WeatherCodes.*;
 
 public class Excel {
 
@@ -121,8 +125,21 @@ public class Excel {
         cell.setCellStyle(cellStyle);
     }
 
-    private static void determineFillColor(FordDealer fordDealer){
-        fordDealer.getWeather().getWeatherCode();
+    private static String determineFillColor(FordDealer fordDealer){
+        String weatherCode = fordDealer.getWeather().getWeatherCode().getValue();
         fordDealer.getWeather().getPrecipitationAccumulation();
+
+        // Uses reverse lookup to find contant that matches
+        switch (WeatherCodes.get(weatherCode)){
+            case RAIN_HEAVY: return "";
+            case FREEZING_RAIN: return "";
+            case FREEZING_RAIN_HEAVY: return "";
+            case ICE_PELLETS_HEAVY: return "";
+            case SNOW: return "";
+            case SNOW_HEAVY:return "";
+            default:
+                throw new IllegalStateException("Unexpected value: " + weatherCode);
+        }
+
     }
 }

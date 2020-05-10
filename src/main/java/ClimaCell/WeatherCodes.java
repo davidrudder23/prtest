@@ -1,5 +1,8 @@
 package ClimaCell;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum WeatherCodes {
     RAIN_HEAVY("rain_heavy"),
     RAIN("rain"),
@@ -32,4 +35,28 @@ public enum WeatherCodes {
     public String getCode() {
         return code;
     }
+
+    //****** Reverse Lookup Implementation************//
+
+    //Lookup table
+    private static final Map<String, WeatherCodes> lookup = new HashMap<>();
+
+    //Populate the lookup table on loading time
+    static
+    {
+        for(WeatherCodes var : WeatherCodes.values())
+        {
+            lookup.put(var.getCode(), var);
+        }
+    }
+
+    //This method can be used for reverse lookup purpose
+    public static WeatherCodes get(String url)
+    {
+        return lookup.get(url);
+    }
+
+    @Override
+    public String toString() {
+        return this.code;  }
 }
