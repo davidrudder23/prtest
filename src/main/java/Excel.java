@@ -113,7 +113,7 @@ public class Excel {
 
     }
 
-    public static void createCell(Row row, int col, HorizontalAlignment HA, VerticalAlignment VA, String value, CellStyle cellStyle) {
+    private static void createCell(Row row, int col, HorizontalAlignment HA, VerticalAlignment VA, String value, CellStyle cellStyle) {
         Cell cell = row.createCell(col);
         cell.setCellValue(value);
         cellStyle.setAlignment(HA);
@@ -121,4 +121,8 @@ public class Excel {
         cell.setCellStyle(cellStyle);
     }
 
+    private static void determineFillColor(FordDealer fordDealer){
+        fordDealer.getWeather().getWeatherCode();
+        fordDealer.getWeather().getPrecipitationAccumulation();
+    }
 }
