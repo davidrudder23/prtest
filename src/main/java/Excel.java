@@ -1,5 +1,7 @@
 import Ford.FordDealer;
+import Time.GenerateTime;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.WorkbookUtil;
@@ -21,10 +23,21 @@ public class Excel {
         Sheet sheetOne = workbook.createSheet(safeName);
 
         for (int i = 0; i < fordDealers.size(); i++) {
-            sheetOne.createRow(i);
+            FordDealer fordDealer = fordDealers.get(i);
+            Row row = sheetOne.createRow(i);
 
+            // TODO Style cells
+            row.createCell(0)s.setCellValue(GenerateTime.getMMDDYYYYTimeNow());
+            row.createCell(1).setCellValue("F"); // F for Ford? See excel sheet example
+            row.createCell(2).setCellValue(fordDealer.getRoute());
+            row.createCell(3).setCellValue(fordDealer.getZipCode());
+            row.createCell(4).setCellValue(fordDealer.getName());
+            row.createCell(5).setCellValue(fordDealer.getCity());
+            row.createCell(6).setCellValue(fordDealer.getStateCode());
+            row.createCell(7).setCellValue(fordDealer.getActualTime());
+            row.createCell(8).setCellValue(fordDealer.getExpectedTime());
+            row.createCell(9).setCellValue("The storm impact information will be here");
         }
-
 
         // write workbook out to file? with name "Ford Weather Report"
         try (OutputStream fileOut = new FileOutputStream("Ford Weather Report.xls")){
