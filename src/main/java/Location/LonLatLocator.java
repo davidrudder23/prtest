@@ -32,7 +32,6 @@ public class LonLatLocator {
                     lonLatZip.setLongitude(split[2]);
                 }
             }
-            br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

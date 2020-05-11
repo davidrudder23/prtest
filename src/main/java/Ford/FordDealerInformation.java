@@ -1,7 +1,5 @@
 package Ford;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +14,11 @@ public class FordDealerInformation {
         if (fordDealershipInformation == null) throw new IllegalArgumentException();
         BufferedReader br;
         try {
-            br = new BufferedReader(new InputStreamReader(fordDealershipInformation));
+            // Must have charsetName set to UTF-8 to remove ï»¿ from beginning of .csv file
+            br = new BufferedReader(new InputStreamReader(fordDealershipInformation, "UTF-8"));
             String line;
-            while ((line = br.readLine()) != null){
-                String[] split = StringUtils.split(line, ",");
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
                 fordDealers.add(new FordDealer(
                         split[0],
                         split[1],
@@ -28,7 +27,7 @@ public class FordDealerInformation {
                         split[4],
                         split[5],
                         split[6]
-                        ));
+                ));
             }
         } catch (IOException e) {
             e.printStackTrace();

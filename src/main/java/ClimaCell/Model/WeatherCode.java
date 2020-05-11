@@ -2,7 +2,7 @@ package ClimaCell.Model;
 
 import com.squareup.moshi.Json;
 
-class WeatherCode {
+public class WeatherCode {
     @Json(name = "value")
     private String value;
 
