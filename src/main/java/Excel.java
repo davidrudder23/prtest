@@ -28,7 +28,6 @@ public class Excel {
         for (int i = 0; i < fordDealers.size(); i++) {
             FordDealer fordDealer = fordDealers.get(i);
             Row row = sheetOne.createRow(i);
-//            cellStyle.setFillBackgroundColor(LIGHT_GREEN.getIndex());
             cellStyle.setFillForegroundColor(OLIVE_GREEN.getIndex());
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             row.setRowStyle(cellStyle);
@@ -105,7 +104,6 @@ public class Excel {
                     "The storm impact information will be here",
                     cellStyle);
 
->>>>>>> af605dc38d60e31b3a711e96a7630db721a3142f
         }
 
         for (int i = 0; i < fordDealers.size(); i++) {
