@@ -1,4 +1,3 @@
-import ClimaCell.Model.WeatherCode;
 import ClimaCell.WeatherCodes;
 import Ford.FordDealer;
 import Time.GenerateTime;
@@ -12,22 +11,27 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import static ClimaCell.WeatherCodes.*;
+import static org.apache.poi.ss.usermodel.IndexedColors.*;
 
 public class Excel {
 
     public static void generateNewWeatherTemplate(ArrayList<FordDealer> fordDealers) {
         Workbook workbook = new HSSFWorkbook();
-        CreationHelper createHelper = workbook.getCreationHelper();
+
         //Check if the name is safe to use
         String safeName = WorkbookUtil.createSafeSheetName("Weather Report");
         Sheet sheetOne = workbook.createSheet(safeName);
 
         // TODO Determine why CellStyle not correctly applying individual styles and setting all to H.center, V.center
         CellStyle cellStyle = workbook.createCellStyle();
+
         for (int i = 0; i < fordDealers.size(); i++) {
             FordDealer fordDealer = fordDealers.get(i);
             Row row = sheetOne.createRow(i);
+//            cellStyle.setFillBackgroundColor(LIGHT_GREEN.getIndex());
+            cellStyle.setFillForegroundColor(OLIVE_GREEN.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            row.setRowStyle(cellStyle);
             createCell(
                     row,
                     0,
@@ -125,20 +129,31 @@ public class Excel {
         cell.setCellStyle(cellStyle);
     }
 
-    private static String determineFillColor(FordDealer fordDealer){
+
+
+    private static Short determineFillColor(FordDealer fordDealer){
         String weatherCode = fordDealer.getWeather().getWeatherCode().getValue();
         fordDealer.getWeather().getPrecipitationAccumulation();
 
+        /*
+        Color table:
+        Olive green  = No current weather delays reported / routes on schedule
+        Light purple = Iminent weather concerns / subject to change as the storm progresses or exits
+              yellow = weather related delays with known degree of delay at this time ( e.g. 1 hr, 2 hrs, ETC.)
+              red    = Route Interruptions, states of emergency, closures, anticipated resumption of routes when
+              known or when available
+
+         */
+
         // Uses reverse lookup to find contant that matches
         switch (WeatherCodes.get(weatherCode)){
-            case RAIN_HEAVY: return "";
-            case FREEZING_RAIN: return "";
-            case FREEZING_RAIN_HEAVY: return "";
-            case ICE_PELLETS_HEAVY: return "";
-            case SNOW: return "";
-            case SNOW_HEAVY:return "";
-            default:
-                throw new IllegalStateException("Unexpected value: " + weatherCode);
+            case RAIN_HEAVY: return 0;
+            case FREEZING_RAIN: return 0;
+            case FREEZING_RAIN_HEAVY: return 0;
+            case ICE_PELLETS_HEAVY: return 0;
+            case SNOW: return 0;
+            case SNOW_HEAVY:return 0;
+            default: return OLIVE_GREEN.getIndex();
         }
 
     }
