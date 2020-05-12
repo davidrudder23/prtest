@@ -7,16 +7,18 @@ import Time.GenerateTime;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.*;
 
+
+/*
+This program will not currently produce any data since it is utilizing the free version of ClimaCell. Plans to get paid version.
+
+// TODO Track request to ensure no calls are made if rate limit has already been reached.
+// TODO Write weather data to file and store it for attempt to utilize 2 hours to reach the needed 181 request needed for free
+
+ */
 public class main {
     public static void main(String[] args) throws IOException {
-
-//        long startTime = System.nanoTime();
-//        long duration = System.nanoTime() - startTime;
-//        System.out.println(duration);
-
 
         // Get all ford data from DealerInformation.csv
         ArrayList<FordDealer> fordDealers = FordDealerInformation.loadFordData();
@@ -31,26 +33,23 @@ public class main {
         has available based on hardware.
          */
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+        for (FordDealer fordDealer : fordDealers) {
 
-        List<Future<ClimaCell>> listOfWeatherData = new ArrayList<>();
-
-
-        Callable<ClimaCell> dailyClimateData = new ClimaCellData(GenerateTime.getISO8601TimeNow(), "-72.560791", "42.08069");
-        listOfWeatherData.add(executor.submit(dailyClimateData));
-
-
-        listOfWeatherData.forEach(data -> {
-            try {
-                System.out.println(data.get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+            Callable<ClimaCell> dailyClimaData = new ClimaCellData(
+                    GenerateTime.getISO8601TimeNow(),
+                    // replace is because some longitudes have white space in front of the string. This causes a %20 in request URL which will generate a bad request.
+                    fordDealer.getLonLatZip().getLongitude().replace(" ", ""),
+                    fordDealer.getLonLatZip().getLatitude());
+            Future<ClimaCell> submit = executor.submit(dailyClimaData);
+            if (submit == null){
+                /*
+                If null then rate limit was reached. 100 request per hour with free account.
+                 */
+                break;
             }
-        });
-
+            fordDealer.setWeather(submit);
+        }
         executor.shutdown();
-
         Excel.generateNewWeatherTemplate(fordDealers);
     }
 }

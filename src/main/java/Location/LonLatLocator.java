@@ -4,10 +4,10 @@ import Ford.FordDealer;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.net.URL;
 
 public class LonLatLocator {
-    private final static InputStream UsZipCodes = LonLatLocator.class.getClassLoader().getResourceAsStream("USZipCodesfrom2013GovernmentData.txt");
+    private final static URL UsZipCodes = LonLatLocator.class.getClassLoader().getResource("USZipCodesfrom2013GovernmentData.txt");
 
     /**
      * Currently return a single Location.LonLatZip. Eventually the goal
@@ -17,21 +17,23 @@ public class LonLatLocator {
      * @param zipCode
      * @return
      */
+
     public static LonLatZip getWithZipCode(String zipCode){
         LonLatZip lonLatZip = new LonLatZip();
         if(UsZipCodes == null) throw new IllegalArgumentException("File not found");
         BufferedReader br;
+        FileInputStream fileInputStream;
         try{
-            br = new BufferedReader(new InputStreamReader(UsZipCodes));
+            fileInputStream = new FileInputStream(String.valueOf(UsZipCodes.getFile()).replaceAll("%20", " "));
+            br = new BufferedReader(new InputStreamReader(fileInputStream));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = StringUtils.split(line, ",");
                 if (split[0].equals(zipCode)){
-                    lonLatZip.setZipCode(split[0]);
-                    lonLatZip.setLatitude(split[1]);
-                    lonLatZip.setLongitude(split[2]);
+                    lonLatZip = new LonLatZip(split[0], split[1], split[2]);
                 }
             }
+            fileInputStream.getChannel().position(0);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

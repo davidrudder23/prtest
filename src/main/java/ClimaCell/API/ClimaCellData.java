@@ -28,20 +28,15 @@ public class ClimaCellData implements Callable<ClimaCell> {
             ",precipitation_accumulation";
 
     private final static String climateCellKey = "&apikey=1h0MB1CLlmZBNEeSaxl8nstk296WD0UV";
-
-    private String iso8601EndDate;
-    private String longitude;
-    private String latitude;
-
     /*
     Moshi.Builder() and JsonAdapter are documented as thread safe and should not
-    cause an race/lock conditions.
-
-    Todo determine if Moshi is being re instantiated on call to a thread or if it is a shared single instance
-    Todo determine if there is a more optimal way for this to be done.
+    cause a race/lock conditions.
      */
     private final Moshi moshi = new Moshi.Builder().build();
     private final JsonAdapter<ClimaCell> climaCellJsonAdapter = moshi.adapter(ClimaCell.class);
+    private String iso8601EndDate;
+    private String longitude;
+    private String latitude;
 
     /**
      * @param iso8601EndDate
@@ -52,6 +47,17 @@ public class ClimaCellData implements Callable<ClimaCell> {
         this.iso8601EndDate = iso8601EndDate;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    /**
+     * Utilized to print all headers in case of debugging
+     *
+     * @param responseHeaders
+     */
+    public static void printHeaders(Headers responseHeaders) {
+        for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+            System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+        }
     }
 
     /**
@@ -67,8 +73,8 @@ public class ClimaCellData implements Callable<ClimaCell> {
         ClimaCell climaCell = null;
         Request request = new Request.Builder().url(
                 climateCellUrl
-                        + "lat=" + latitude
-                        + "&lon=" + longitude
+                        + "lat=" + this.latitude
+                        + "&lon=" + this.longitude
                         + climateCellUnitAndCountryCode
                         + "&end_time="
                         + iso8601EndDate
@@ -76,7 +82,14 @@ public class ClimaCellData implements Callable<ClimaCell> {
                         + climateCellKey
         ).build();
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code: " + response);
+            if (!response.isSuccessful()) {
+                if (response.code() == 429) {
+                    return null;
+                } else {
+                    throw new IOException("Unexpected Response: " + response.toString());
+                }
+            }
+
             String temp1 = response.body().string();
             /*
             Clima Cell Api is return an array and moshi-adapter is expecting an object. By removing the
@@ -85,20 +98,9 @@ public class ClimaCellData implements Callable<ClimaCell> {
             String temp2 = StringUtils.removeStart(temp1, "[");
             String temp3 = StringUtils.removeEnd(temp2, "]");
             climaCell = climaCellJsonAdapter.fromJson(temp3);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return climaCell;
-    }
-
-    /**
-     * Utilized to print all headers in case of debugging
-     *
-     * @param responseHeaders
-     */
-    public static void printHeaders(Headers responseHeaders) {
-        for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-            System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-        }
     }
 }

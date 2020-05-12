@@ -3,20 +3,25 @@ package Ford;
 import ClimaCell.Model.ClimaCell;
 import Location.LonLatZip;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 public class FordDealer {
     private String route;
-    private String zipCode;
+    private String dealerCode;
     private String name;
     private String city;
     private String stateCode;
     private String actualTime;
     private String expectedTime;
+    private String zipCode;
     private LonLatZip lonLatZip;
-    private ClimaCell weather;
+    private Future<ClimaCell> weather;
 
-    public FordDealer(String route, String zipCode, String name, String city, String stateCode, String actualTime, String expectedTime, LonLatZip lonLatZip, ClimaCell weather) {
+
+    public FordDealer(String route, String dealerCode, String name, String city, String stateCode, String actualTime, String expectedTime, LonLatZip lonLatZip, Future<ClimaCell> weather) {
         this.route = route;
-        this.zipCode = zipCode;
+        this.dealerCode = dealerCode;
         this.name = name;
         this.city = city;
         this.stateCode = stateCode;
@@ -26,25 +31,35 @@ public class FordDealer {
         this.weather = weather;
     }
 
-    public FordDealer(String route, String zipCode, String name, String city, String stateCode, String actualTime, String expectedTime, LonLatZip lonLatZip) {
+    public FordDealer(String route, String dealerCode, String name, String city, String stateCode, String actualTime, String expectedTime, String zipCode, LonLatZip lonLatZip) {
         this.route = route;
-        this.zipCode = zipCode;
+        this.dealerCode = dealerCode;
         this.name = name;
         this.city = city;
         this.stateCode = stateCode;
         this.actualTime = actualTime;
         this.expectedTime = expectedTime;
         this.lonLatZip = lonLatZip;
+        this.zipCode = zipCode;
     }
 
-    public FordDealer(String route, String zipCode, String name, String city, String stateCode, String actualTime, String expectedTime) {
+    public FordDealer(String route, String dealerCode, String name, String city, String stateCode, String actualTime, String expectedTime, String zipCode) {
         this.route = route;
-        this.zipCode = zipCode;
+        this.dealerCode = dealerCode;
         this.name = name;
         this.city = city;
         this.stateCode = stateCode;
         this.actualTime = actualTime;
         this.expectedTime = expectedTime;
+        this.zipCode = zipCode;
+    }
+
+    public String getDealerCode() {
+        return dealerCode;
+    }
+
+    public void setDealerCode(String dealerCode) {
+        this.dealerCode = dealerCode;
     }
 
     public String getRoute() {
@@ -111,11 +126,11 @@ public class FordDealer {
         this.lonLatZip = lonLatZip;
     }
 
-    public ClimaCell getWeather() {
-        return weather;
+    public ClimaCell getWeather() throws ExecutionException, InterruptedException {
+        return weather.get();
     }
 
-    public void setWeather(ClimaCell weather) {
+    public void setWeather(Future<ClimaCell> weather) {
         this.weather = weather;
     }
 
@@ -123,12 +138,13 @@ public class FordDealer {
     public String toString() {
         return "FordDealer{" +
                 "route='" + route + '\'' +
-                ", zipCode='" + zipCode + '\'' +
+                ", dealerCode='" + dealerCode + '\'' +
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
                 ", stateCode='" + stateCode + '\'' +
                 ", actualTime='" + actualTime + '\'' +
                 ", expectedTime='" + expectedTime + '\'' +
+                ", zipCode='" + zipCode + '\'' +
                 ", lonLatZip=" + lonLatZip +
                 ", weather=" + weather +
                 '}';

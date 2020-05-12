@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.*;
 
@@ -54,8 +55,14 @@ public class Excel {
         String weatherReportDataName = WorkbookUtil.createSafeSheetName("Weather Report Data");
         Sheet weatherReportData = workbook.createSheet(weatherReportDataName);
 
-        setupWeatherReportSheet(workbook, weatherReport, fordDealers);
-        setupWeatherReportDataSheet(workbook, weatherReportData, fordDealers);
+        try{
+            setupWeatherReportSheet(workbook, weatherReport, fordDealers);
+            setupWeatherReportDataSheet(workbook, weatherReportData, fordDealers);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
         try (OutputStream fileOut = new FileOutputStream("Ford Weather Report.xls")) {
@@ -68,12 +75,13 @@ public class Excel {
 
     }
 
-    private static void setupWeatherReportDataSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) {
+    /*
+        There is a chance that this will throw an error if for some reason one of
+     */
+    private static void setupWeatherReportDataSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) throws ExecutionException, InterruptedException {
         CellStyle cellStyle = workbook.createCellStyle();
 
         // TODO Create header for Weather Report Data with column names
-
-
         for (int i = 1; i < fordDealers.size() + 1; i++) {
             FordDealer fordDealer = fordDealers.get(i - 1);
             Row row = sheet.createRow(i);
@@ -164,6 +172,15 @@ public class Excel {
                         fordDealer.getWeather().getPrecipitationAccumulation().getValue().toString(),
                         cellStyle
                 );
+            }else {
+                createCell(
+                        row,
+                        5,
+                        HorizontalAlignment.CENTER,
+                        VerticalAlignment.CENTER,
+                        "There was an issue requesting this data from ClimaCell weather API",
+                        cellStyle
+                );
             }
         }
 
@@ -173,11 +190,10 @@ public class Excel {
         }
     }
 
-    private static void setupWeatherReportSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) {
+    private static void setupWeatherReportSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) throws ExecutionException, InterruptedException {
 
         // TODO Determine why CellStyle not correctly applying individual styles and setting all to H.center, V.center
         CellStyle cellStyle = workbook.createCellStyle();
-
         for (int i = 0; i < fordDealers.size(); i++) {
             FordDealer fordDealer = fordDealers.get(i);
             Row row = sheet.createRow(i);
@@ -271,7 +287,7 @@ public class Excel {
         cell.setCellStyle(cellStyle);
     }
 
-    private static Short determineFillColor(FordDealer fordDealer) {
+    private static Short determineFillColor(FordDealer fordDealer) throws ExecutionException, InterruptedException {
         // ensures weather has been initialized
         if (fordDealer.getWeather() == null) {
             return OLIVE_GREEN.getIndex();
