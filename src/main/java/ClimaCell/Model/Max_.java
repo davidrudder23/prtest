@@ -35,4 +35,11 @@ public class Max_ {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Max_{" +
+                "value=" + value +
+                ", units='" + units + '\'' +
+                '}';
+    }
 }

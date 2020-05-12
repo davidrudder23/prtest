@@ -36,4 +36,11 @@ public class Precipitation {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Precipitation{" +
+                "observationTime='" + observationTime + '\'' +
+                ", max=" + max +
+                '}';
+    }
 }

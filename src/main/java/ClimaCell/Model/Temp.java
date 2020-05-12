@@ -48,4 +48,13 @@ public class Temp {
         this.max = max;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Temp{" +
+                "observationTime='" + observationTime + '\'' +
+                ", min=" + min +
+                ", max=" + max +
+                '}';
+    }
 }
