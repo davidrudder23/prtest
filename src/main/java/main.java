@@ -4,17 +4,17 @@ import Ford.FordDealer;
 import Ford.FordDealerInformation;
 import Location.LonLatLocator;
 import Time.GenerateTime;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.*;
-
 
 /*
 This program will not currently produce any data since it is utilizing the free version of ClimaCell. Plans to get paid version.
 
 // TODO Track request to ensure no calls are made if rate limit has already been reached.
 // TODO Write weather data to file and store it for attempt to utilize 2 hours to reach the needed 181 request needed for free
+// TODO Create cache for most common long and lats
+// TODO Write GUI to Generate and Select a download location
 
  */
 public class main {
@@ -53,5 +53,3 @@ public class main {
         Excel.generateNewWeatherTemplate(fordDealers);
     }
 }
-
-// TODO Create cache for most common long and lats
