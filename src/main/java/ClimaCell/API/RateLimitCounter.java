@@ -1,4 +1,5 @@
-import java.util.concurrent.locks.Lock;
+package ClimaCell.API;
+
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
@@ -16,16 +17,18 @@ public class RateLimitCounter {
     ReentrantLock will ensure that no thread is resource starved. It keeps a
     fifo queue of all threads attempting to access it.
      */
-    private final ReentrantLock reentrantlock = new ReentrantLock();
+    private final ReentrantLock reentrantlock = new ReentrantLock(true);
 
-
-    private void incrementCounter(){
+    public void incrementCounter(){
         reentrantlock.lock();
         try {
             counter+=1;
         }finally {
             reentrantlock.unlock();
         }
+    }
+
+    public RateLimitCounter() {
     }
 
     public int getCounter() {
