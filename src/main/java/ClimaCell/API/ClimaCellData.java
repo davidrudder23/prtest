@@ -13,6 +13,13 @@ import java.io.IOException;
 import java.util.concurrent.Callable;
 
 public class ClimaCellData implements Callable<ClimaCell> {
+    /*
+    Utilized to ensure we don't exceed the rate limit of the Api Keys.
+    If the request exceed 100 it will switch key. If it exceeds 200 we will stop
+    request until 1 hour has elapsed from the previous calls.
+     */
+    private final static RateLimitCounter rlc = new RateLimitCounter();
+
     private final static OkHttpClient client = new OkHttpClient();
     private final static String climateCellUrl = "https://api.climacell.co/v3/weather/forecast/daily?";
     /**
@@ -27,7 +34,10 @@ public class ClimaCellData implements Callable<ClimaCell> {
             ",weather_code" +
             ",precipitation_accumulation";
 
-    private final static String climateCellKey = "&apikey=1h0MB1CLlmZBNEeSaxl8nstk296WD0UV";
+    // ClimaCell has a rate limit of 100calls/hr but we need 200. Therefore 2 rotating keys.
+    private final static String climateCellKey1 = "&apikey=1h0MB1CLlmZBNEeSaxl8nstk296WD0UV";
+    private final static String climatecellKey2 = "&apikey=dOIdRxs2s0rnwlafeB92Lzwh6eQisSSC";
+
     /*
     Moshi.Builder() and JsonAdapter are documented as thread safe and should not
     cause a race/lock conditions.
@@ -70,6 +80,10 @@ public class ClimaCellData implements Callable<ClimaCell> {
      * @return ClimaCell object for a single day. It does not currently handle a multi-day parse.
      */
     public ClimaCell call() {
+        // Thread should wait here until incrementCounter is executed
+        rlc.incrementCounter();
+        int counter = rlc.getCounter();
+
         ClimaCell climaCell = null;
         Request request = new Request.Builder().url(
                 climateCellUrl
@@ -79,7 +93,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
                         + "&end_time="
                         + iso8601EndDate
                         + climateCellFields
-                        + climateCellKey
+                        + (counter <= 99 ? climateCellKey1 : climatecellKey2)
         ).build();
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
