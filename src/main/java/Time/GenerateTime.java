@@ -33,7 +33,7 @@ public class GenerateTime {
     }
 
     public static long getUnixTime(){
-        return Instant.EPOCH.getEpochSecond();
+        return Instant.now().getEpochSecond();
     }
 
 }

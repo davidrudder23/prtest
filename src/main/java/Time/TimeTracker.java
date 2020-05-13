@@ -3,12 +3,12 @@ package Time;
 import java.io.*;
 
 public class TimeTracker {
-    public static void saveCurrentExecutionTime(){
-        File file = new File("ExecutionTime.txt");
+    public static void saveCurrentExecutionTime() {
+        File file = new File("src/main/resources/timetracking/ExecutionTime.txt");
         FileWriter fileWriter;
         try {
             fileWriter = new FileWriter(file, false);
-            fileWriter.write(GenerateTime.getUnixTime()+"");
+            fileWriter.write(GenerateTime.getUnixTime() + "");
             fileWriter.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -17,17 +17,17 @@ public class TimeTracker {
         }
     }
 
-    public static String readLastExecutionTime(){
+    public static long readLastExecutionTime() {
         // Extract to class var
         FileReader file;
         BufferedReader br;
         try {
-            file = new FileReader("ExecutionTime.txt");
+            file = new FileReader("src/main/resources/timetracking/ExecutionTime.txt");
             br = new BufferedReader(file);
             String line;
-            while ((line=br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 // There should only be 1 line
-                return line;
+                return Long.valueOf(line);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -35,7 +35,6 @@ public class TimeTracker {
             e.printStackTrace();
         }
         // returns empty string if ExecutionTime.txt is empty
-        return "";
+        return -1;
     }
-
 }

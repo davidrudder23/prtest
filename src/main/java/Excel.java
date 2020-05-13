@@ -121,7 +121,6 @@ public class Excel {
                     fordDealer.getStateCode(),
                     cellStyle);
 
-
             if (fordDealer.getWeather() != null) {
                 //WeatherCode{value='cloudy'}
                 createCell(
@@ -305,13 +304,13 @@ public class Excel {
 
          */
 
+        System.out.println("Weather Code: " + value);
         /*
          Uses reverse lookup to find constant that matches
          Additionally, these statements should not be merged to reduce amount because ClimaCell returns
          a different code for each of these conditions. If future change of color code or determination
          needs to be done it can be more effectively done here.
         */
-
         switch (WeatherCodes.get(value)) {
             case RAIN_HEAVY:
                 return LAVENDER.getIndex();
