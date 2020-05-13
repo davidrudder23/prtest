@@ -2,6 +2,7 @@ package Time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -30,4 +31,9 @@ public class GenerateTime {
         String currentTimeAsMMDDYYYY = dateFormat.format(new Date());
         return currentTimeAsMMDDYYYY;
     }
+
+    public static long getUnixTime(){
+        return Instant.EPOCH.getEpochSecond();
+    }
+
 }

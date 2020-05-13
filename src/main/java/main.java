@@ -29,6 +29,9 @@ public class main {
             fordDealer.setLonLatZip(LonLatLocator.getWithZipCode(fordDealer.getZipCode()));
         }
 
+        // TODO save current EPOCH time to track how long it has been since code execution.
+
+
         /*
         RunTime.getRuntime().availableProcessors will return the number of processors a system
         has available based on hardware.
