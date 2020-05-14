@@ -84,9 +84,7 @@ public class Excel {
      */
     private static void setupWeatherReportDataSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) throws ExecutionException, InterruptedException {
         CellStyle cellStyle = workbook.createCellStyle();
-        // TODO Create header for Weather Report Data with column names
         addWeatherReportDataSheetHeader(sheet, cellStyle);
-
         for (int i = 1; i < fordDealers.size() + 1; i++) {
             FordDealer fordDealer = fordDealers.get(i - 1);
             Row row = sheet.createRow(i);
