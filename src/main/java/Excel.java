@@ -295,17 +295,6 @@ public class Excel {
         PrecipitationAccumulation precipitationAccumulation = fordDealer.getWeather().getPrecipitationAccumulation();
 
         /*
-        Color table:
-        Olive green  = No current weather delays reported / routes on schedule
-        Light purple = Imminent weather concerns / subject to change as the storm progresses or exits
-              yellow = weather related delays with known degree of delay at this time ( e.g. 1 hr, 2 hrs, ETC.)
-              red    = Route Interruptions, states of emergency, closures, anticipated resumption of routes when
-              known or when available
-
-         */
-
-        System.out.println("Weather Code: " + value);
-        /*
          Uses reverse lookup to find constant that matches
          Additionally, these statements should not be merged to reduce amount because ClimaCell returns
          a different code for each of these conditions. If future change of color code or determination

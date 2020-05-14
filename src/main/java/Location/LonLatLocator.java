@@ -1,10 +1,11 @@
 package Location;
 
-import Ford.FordDealer;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.URL;
+
+//TODO Create a 'cache' for most usedZipCodes
 
 public class LonLatLocator {
     private final static URL UsZipCodes = LonLatLocator.class.getClassLoader().getResource("USZipCodesfrom2013GovernmentData.txt");
@@ -18,18 +19,18 @@ public class LonLatLocator {
      * @return
      */
 
-    public static LonLatZip getWithZipCode(String zipCode){
+    public static LonLatZip getWithZipCode(String zipCode) {
         LonLatZip lonLatZip = new LonLatZip();
-        if(UsZipCodes == null) throw new IllegalArgumentException("File not found");
+        if (UsZipCodes == null) throw new IllegalArgumentException("File not found");
         BufferedReader br;
         FileInputStream fileInputStream;
-        try{
+        try {
             fileInputStream = new FileInputStream(String.valueOf(UsZipCodes.getFile()).replaceAll("%20", " "));
             br = new BufferedReader(new InputStreamReader(fileInputStream));
             String line;
-            while ((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 String[] split = StringUtils.split(line, ",");
-                if (split[0].equals(zipCode)){
+                if (split[0].equals(zipCode)) {
                     lonLatZip = new LonLatZip(split[0], split[1], split[2]);
                 }
             }
