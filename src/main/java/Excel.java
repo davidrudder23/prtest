@@ -55,7 +55,7 @@ public class Excel {
         String weatherReportDataName = WorkbookUtil.createSafeSheetName("Weather Report Data");
         Sheet weatherReportData = workbook.createSheet(weatherReportDataName);
 
-        try{
+        try {
             setupWeatherReportSheet(workbook, weatherReport, fordDealers);
             setupWeatherReportDataSheet(workbook, weatherReportData, fordDealers);
         } catch (InterruptedException e) {
@@ -64,6 +64,10 @@ public class Excel {
             e.printStackTrace();
         }
 
+        for (int i = 0; i < fordDealers.size(); i++) {
+            weatherReportData.autoSizeColumn(i);
+            weatherReport.autoSizeColumn(i);
+        }
 
         try (OutputStream fileOut = new FileOutputStream("Ford Weather Report.xls")) {
             workbook.write(fileOut);
@@ -80,8 +84,9 @@ public class Excel {
      */
     private static void setupWeatherReportDataSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) throws ExecutionException, InterruptedException {
         CellStyle cellStyle = workbook.createCellStyle();
-
         // TODO Create header for Weather Report Data with column names
+        addWeatherReportDataSheetHeader(sheet, cellStyle);
+
         for (int i = 1; i < fordDealers.size() + 1; i++) {
             FordDealer fordDealer = fordDealers.get(i - 1);
             Row row = sheet.createRow(i);
@@ -142,6 +147,7 @@ public class Excel {
                         fordDealer.getWeather().getTemp().get(0).getMin().getValue().toString(),
                         cellStyle
                 );
+
                 //max=Max{value=52.04, units='F'}
                 createCell(
                         row,
@@ -155,7 +161,7 @@ public class Excel {
                 //precipitation=[Precipitation{observationTime='2020-05-12T10:00:00Z', max=Max_{value=0.0, units='in/hr'}}]
                 createCell(
                         row,
-                        6,
+                        8,
                         HorizontalAlignment.CENTER,
                         VerticalAlignment.CENTER,
                         fordDealer.getWeather().getPrecipitation().get(0).getMax().getValue().toString(),
@@ -165,13 +171,13 @@ public class Excel {
                 //precipitation_accumulation=PrecipitationAccumulation{value=0.0, units='in'}
                 createCell(
                         row,
-                        7,
+                        9,
                         HorizontalAlignment.CENTER,
                         VerticalAlignment.CENTER,
                         fordDealer.getWeather().getPrecipitationAccumulation().getValue().toString(),
                         cellStyle
                 );
-            }else {
+            } else {
                 createCell(
                         row,
                         5,
@@ -182,11 +188,94 @@ public class Excel {
                 );
             }
         }
+    }
 
-        // TODO extract to a func
-        for (int i = 0; i < fordDealers.size(); i++) {
-            sheet.autoSizeColumn(i);
-        }
+    private static void addWeatherReportDataSheetHeader(Sheet sheet, CellStyle cellStyle) {
+    // route code, zip code, city, state, weather condition, min temp, max temp, precipitation expected, precip accumulation
+
+        Row row = sheet.createRow(0);
+        createCell(
+                row,
+                0,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Route Code",
+                cellStyle
+        );
+        createCell(
+                row,
+                1,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Zip Code",
+                cellStyle
+        );
+        createCell(
+                row,
+                2,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Dealer Name",
+                cellStyle
+        );
+
+        createCell(
+                row,
+                3,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "City",
+                cellStyle
+        );
+        createCell(
+                row,
+                4,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "State",
+                cellStyle
+        );
+        createCell(
+                row,
+                5,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Weather Condition",
+                cellStyle
+        );
+        createCell(
+                row,
+                6,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Min Temp",
+                cellStyle
+        );
+        createCell(
+                row,
+                7,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Max Temp",
+                cellStyle
+        );
+        createCell(
+                row,
+                8,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Precipitation Expected",
+                cellStyle
+        );
+        createCell(
+                row,
+                9,
+                HorizontalAlignment.CENTER,
+                VerticalAlignment.CENTER,
+                "Precipitation Current",
+                cellStyle
+        );
+
     }
 
     private static void setupWeatherReportSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) throws ExecutionException, InterruptedException {
@@ -271,10 +360,6 @@ public class Excel {
                     VerticalAlignment.CENTER,
                     weatherReportInformation(fillColor),
                     cellStyle);
-        }
-
-        for (int i = 0; i < fordDealers.size(); i++) {
-            sheet.autoSizeColumn(i);
         }
     }
 
