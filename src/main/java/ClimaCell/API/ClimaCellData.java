@@ -83,6 +83,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
         // Thread should wait here until incrementCounter is executed
         rlc.incrementCounter();
         int counter = rlc.getCounter();
+        System.out.println(counter);
 
         ClimaCell climaCell = null;
         Request request = new Request.Builder().url(
@@ -97,11 +98,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
         ).build();
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                if (response.code() == 429) {
-                    return null;
-                } else {
-                    throw new IOException("Unexpected Response: " + response.toString());
-                }
+                throw new IOException("Unexpected Response: " + response.toString());
             }
 
             String temp1 = response.body().string();
@@ -111,6 +108,9 @@ public class ClimaCellData implements Callable<ClimaCell> {
              */
             String temp2 = StringUtils.removeStart(temp1, "[");
             String temp3 = StringUtils.removeEnd(temp2, "]");
+
+
+            System.out.println(temp3);
             climaCell = climaCellJsonAdapter.fromJson(temp3);
         } catch (IOException e) {
             e.printStackTrace();

@@ -16,10 +16,10 @@ public class FordDealer {
     private String expectedTime;
     private String zipCode;
     private LonLatZip lonLatZip;
-    private Future<ClimaCell> weather;
+    private ClimaCell weather;
 
 
-    public FordDealer(String route, String dealerCode, String name, String city, String stateCode, String actualTime, String expectedTime, LonLatZip lonLatZip, Future<ClimaCell> weather) {
+    public FordDealer(String route, String dealerCode, String name, String city, String stateCode, String actualTime, String expectedTime, LonLatZip lonLatZip, ClimaCell weather) {
         this.route = route;
         this.dealerCode = dealerCode;
         this.name = name;
@@ -127,10 +127,10 @@ public class FordDealer {
     }
 
     public ClimaCell getWeather() throws ExecutionException, InterruptedException {
-        return weather.get();
+        return weather;
     }
 
-    public void setWeather(Future<ClimaCell> weather) {
+    public void setWeather(ClimaCell weather) {
         this.weather = weather;
     }
 
