@@ -11,10 +11,10 @@ import java.util.concurrent.*;
 /*
 This program will not currently produce any data since it is utilizing the free version of ClimaCell. Plans to get paid version.
 
-// TODO Track request to ensure no calls are made if rate limit has already been reached.
-// TODO Write weather data to file and store it for attempt to utilize 2 hours to reach the needed 181 request needed for free
-// TODO Create cache for most common long and lats
-// TODO Write GUI to Generate and Select a download location
+// TODO(1) Track request to ensure no calls are made if rate limit has already been reached.
+// TODO(2) Write weather data to file and store it for attempt to utilize 2 hours to reach the needed 181 request needed for free
+// TODO(3) Write GUI to Generate and Select a download location
+// TODO(4) Create cache for most common long and lats
 
  */
 public class main {
