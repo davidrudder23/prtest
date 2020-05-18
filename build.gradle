@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version('0.0.8')
 }
@@ -7,7 +6,7 @@ plugins {
 group 'org.FordWeather'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.11
 
 repositories {
     mavenCentral()
@@ -33,7 +32,7 @@ test {
     useJUnitPlatform()
 }
 
-mainClassName = 'org.openjfx.main'
+mainClassName = 'main'
 
 javafx {
     version = "14"
