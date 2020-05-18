@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.concurrent.*;
 
 // TODO Clean code up
+// TODO add additional error handling
+// TODO test to ensure all alerts are correctly displaying
+
 
 public class ReportUI extends Application {
 
@@ -112,6 +115,7 @@ public class ReportUI extends Application {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The Report was successfully generated. ");
                 alert.setGraphic(null);
                 alert.setHeaderText(null);
+                alert.show();
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "You have tried to generate a new report to soon. ", ButtonType.OK);
                 alert.setHeaderText(null);
