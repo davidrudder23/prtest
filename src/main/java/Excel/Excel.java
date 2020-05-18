@@ -1,3 +1,5 @@
+package Excel;
+
 import ClimaCell.Model.PrecipitationAccumulation;
 import ClimaCell.WeatherCodes;
 import Ford.FordDealer;
@@ -69,7 +71,7 @@ public class Excel {
             weatherReport.autoSizeColumn(i);
         }
 
-        try (OutputStream fileOut = new FileOutputStream("Ford Weather Report.xls")) {
+        try (OutputStream fileOut = new FileOutputStream("src/main/resources/ExcelFiles/Ford Weather Report.xls")) {
             workbook.write(fileOut);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

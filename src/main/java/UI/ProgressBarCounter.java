@@ -1,14 +1,17 @@
+package UI;
+
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ProgressBarCounter {
-
+    private static final int API_CALLS = 181;
     private volatile int counter=0;
     private final ReentrantLock reentrantlock = new ReentrantLock(true);
+    private ReportUI reportUI = new ReportUI();
 
     public void incrementCounter(){
         reentrantlock.lock();
         try {
-            counter+=1;
+            reportUI.getProgressBar().setProgress((counter+=1)/API_CALLS);
         }finally {
             reentrantlock.unlock();
         }

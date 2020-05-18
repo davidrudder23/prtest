@@ -1,6 +1,7 @@
 package ClimaCell.API;
 
 import ClimaCell.Model.ClimaCell;
+import UI.ProgressBarCounter;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import okhttp3.Headers;
@@ -19,6 +20,8 @@ public class ClimaCellData implements Callable<ClimaCell> {
     request until 1 hour has elapsed from the previous calls.
      */
     private final static RateLimitCounter rlc = new RateLimitCounter();
+
+    private final static ProgressBarCounter pbc = new ProgressBarCounter();
 
     private final static OkHttpClient client = new OkHttpClient();
     private final static String climateCellUrl = "https://api.climacell.co/v3/weather/forecast/daily?";
@@ -83,7 +86,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
         // Thread should wait here until incrementCounter is executed
         rlc.incrementCounter();
         int counter = rlc.getCounter();
-        System.out.println(counter);
+        pbc.incrementCounter();
 
         ClimaCell climaCell = null;
         Request request = new Request.Builder().url(
