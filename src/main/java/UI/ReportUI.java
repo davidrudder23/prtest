@@ -27,7 +27,6 @@ import java.util.concurrent.*;
 // TODO add additional error handling
 // TODO test to ensure all alerts are correctly displaying
 
-
 public class ReportUI extends Application {
 
     private ProgressBar progressBar = new ProgressBar(0);
@@ -46,10 +45,7 @@ public class ReportUI extends Application {
         vBox.alignmentProperty().setValue(Pos.CENTER);
 
         // TODO use add all it will look cleaner
-        vBox.getChildren().add(label);
-        vBox.getChildren().add(progressBar);
-        vBox.getChildren().add(generateReportBtn);
-        vBox.getChildren().add(exportReport);
+        vBox.getChildren().addAll(label, progressBar,generateReportBtn,exportReport);
 
         VBox.setMargin(label, new Insets(2));
         VBox.setMargin(progressBar, new Insets(0, 5, 5, 5));
@@ -86,9 +82,7 @@ public class ReportUI extends Application {
             if (file.exists()) {
                 try {
                     File excelReport = new File("src/main/resources/ExcelFiles/Ford Weather Report.xls");
-                    System.out.println(excelReport.exists());
                     FileUtils.copyFile(excelReport, new File(file.getPath()+"/Ford Weather Report.xls"));
-                    System.out.println(file.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -111,7 +105,6 @@ public class ReportUI extends Application {
 
             // TODO generalize alerts
             if (successful) {
-                System.out.println("The report was successful");
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The Report was successfully generated. ");
                 alert.setGraphic(null);
                 alert.setHeaderText(null);
@@ -166,7 +159,6 @@ public class ReportUI extends Application {
             solely for the purpose of not running the application when the rate limit
             has already been reached for an hour. 100 calls/hr x2 since there is 2 keys
              */
-            System.out.println(GenerateTime.getUnixTime());
             if ((GenerateTime.getUnixTime() - lastExecutionTime) > 3600) {
             /*
             RunTime.getRuntime().availableProcessors will return the number of processors a system
@@ -185,7 +177,6 @@ public class ReportUI extends Application {
                             fordDealer.getLonLatZip().getLatitude());
                     Future<ClimaCell> submit = executor.submit(dailyClimaData);
                     try {
-                        System.out.println(submit.get());
                         fordDealer.setWeather(submit.get());
                     } catch (InterruptedException e) {
                         e.printStackTrace();

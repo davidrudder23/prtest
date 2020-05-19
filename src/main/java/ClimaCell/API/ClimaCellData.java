@@ -111,9 +111,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
              */
             String temp2 = StringUtils.removeStart(temp1, "[");
             String temp3 = StringUtils.removeEnd(temp2, "]");
-
-
-            System.out.println(temp3);
+            
             climaCell = climaCellJsonAdapter.fromJson(temp3);
         } catch (IOException e) {
             e.printStackTrace();
