@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -26,6 +27,7 @@ import java.util.concurrent.*;
 // TODO Clean code up
 // TODO add additional error handling
 // TODO test to ensure all alerts are correctly displaying
+// TODO Add CSS
 
 public class ReportUI extends Application {
 
@@ -44,7 +46,6 @@ public class ReportUI extends Application {
 
         vBox.alignmentProperty().setValue(Pos.CENTER);
 
-        // TODO use add all it will look cleaner
         vBox.getChildren().addAll(label, progressBar,generateReportBtn,exportReport);
 
         VBox.setMargin(label, new Insets(2));
@@ -103,23 +104,23 @@ public class ReportUI extends Application {
             thread.start();
             Boolean successful = booleanFutureTask.get();
 
-            // TODO generalize alerts
             if (successful) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The Report was successfully generated. ");
-                alert.setGraphic(null);
-                alert.setHeaderText(null);
-                alert.show();
+                alertBox(AlertType.CONFIRMATION, "The new report was successfully generated.", ButtonType.OK);
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "You have tried to generate a new report to soon. ", ButtonType.OK);
-                alert.setHeaderText(null);
-                alert.setGraphic(null);
-                alert.show();
+                alertBox(AlertType.INFORMATION, "You have tried to generate a new report to soon. The previous report is still available to export.", ButtonType.CLOSE);
             }
             doneLoading(label, progressBar, generateReportBtn);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void alertBox(AlertType alertType, String info, ButtonType buttonType){
+        Alert alert = new Alert(alertType, info, buttonType);
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
+        alert.show();
     }
 
     public void loading(Label label, ProgressBar progressBar, Button generateReportBtn) {
