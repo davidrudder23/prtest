@@ -145,7 +145,7 @@ public class Excel {
                 //precipitation=[Precipitation{observationTime='2020-05-12T10:00:00Z', max=Max_{value=0.0, units='in/hr'}}]
                 createCell(
                         row,
-                        8,
+                        9,
                         fordDealer.getWeather().getPrecipitation().get(0).getMax().getValue().toString(),
                         cellStyle
                 );
@@ -153,7 +153,7 @@ public class Excel {
                 //precipitation_accumulation=PrecipitationAccumulation{value=0.0, units='in'}
                 createCell(
                         row,
-                        9,
+                        8,
                         fordDealer.getWeather().getPrecipitationAccumulation().getValue().toString(),
                         cellStyle
                 );

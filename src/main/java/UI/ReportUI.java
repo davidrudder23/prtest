@@ -110,7 +110,7 @@ public class ReportUI extends Application {
             // TODO ensure that this is actually running on a new thread and not the UI thread
             FutureTask<Boolean> booleanFutureTask = new FutureTask<>(genReport);
             Thread thread = new Thread(booleanFutureTask);
-            thread.start();
+            thread.run();
             Boolean successful = booleanFutureTask.get();
 
             if (successful) {
