@@ -9,6 +9,7 @@ import Location.LonLatLocator;
 import Time.GenerateTime;
 import Time.TimeTracker;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,9 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
-// TODO Clean code up
 // TODO add additional error handling
-// TODO test to ensure all alerts are correctly displaying
 // TODO Add CSS
 
 public class ReportUI extends Application {
@@ -46,7 +45,7 @@ public class ReportUI extends Application {
 
         vBox.alignmentProperty().setValue(Pos.CENTER);
 
-        vBox.getChildren().addAll(label, progressBar,generateReportBtn,exportReport);
+        vBox.getChildren().addAll(label, progressBar, generateReportBtn, exportReport);
 
         VBox.setMargin(label, new Insets(2));
         VBox.setMargin(progressBar, new Insets(0, 5, 5, 5));
@@ -73,32 +72,42 @@ public class ReportUI extends Application {
         progressBar.setManaged(false);
 
         generateReportBtn.setOnAction((event) -> {
-            handleGenerateReportButton(label, progressBar, generateReportBtn);
+            handleGenerateReportButton(label, progressBar, generateReportBtn, exportReport);
         });
 
-        DirectoryChooser dirChooser = new DirectoryChooser();
         exportReport.setOnAction((event -> {
-            dirChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-            File file = dirChooser.showDialog(primaryStage);
-            if (file.exists()) {
-                try {
-                    File excelReport = new File("src/main/resources/ExcelFiles/Ford Weather Report.xls");
-                    FileUtils.copyFile(excelReport, new File(file.getPath()+"/Ford Weather Report.xls"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            handleExportButton(primaryStage, event);
         }));
+
     }
 
-    public void handleGenerateReportButton(Label label, ProgressBar progressBar, Button generateReportBtn) {
-        loading(label, progressBar, generateReportBtn);
+    private void handleExportButton(Stage primaryStage, ActionEvent event) {
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        File file = dirChooser.showDialog(primaryStage);
+        if (file.exists()) {
+            try {
+                File excelReport = new File("src/main/resources/ExcelFiles/Ford Weather Report.xls");
+                if (excelReport == null) {
+                    alertBox(AlertType.WARNING, "The report you are trying to export does no exist. You must first generate a new report.", ButtonType.OK);
+                } else {
+                    FileUtils.copyFile(excelReport, new File(file.getPath() + "/Ford Weather Report.xls"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handleGenerateReportButton(Label label, ProgressBar progressBar, Button reportBtn, Button generateReportBtn) {
+        loading(label, progressBar, reportBtn, generateReportBtn);
         try {
             Callable<Boolean> genReport = () -> {
                 // Returns true when done
                 return generateReport();
             };
 
+            // TODO ensure that this is actually running on a new thread and not the UI thread
             FutureTask<Boolean> booleanFutureTask = new FutureTask<>(genReport);
             Thread thread = new Thread(booleanFutureTask);
             thread.start();
@@ -109,34 +118,38 @@ public class ReportUI extends Application {
             } else {
                 alertBox(AlertType.INFORMATION, "You have tried to generate a new report to soon. The previous report is still available to export.", ButtonType.CLOSE);
             }
-            doneLoading(label, progressBar, generateReportBtn);
+            doneLoading(label, progressBar, reportBtn, generateReportBtn);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void alertBox(AlertType alertType, String info, ButtonType buttonType){
+    private void alertBox(AlertType alertType, String info, ButtonType buttonType) {
         Alert alert = new Alert(alertType, info, buttonType);
         alert.setHeaderText(null);
         alert.setGraphic(null);
         alert.show();
     }
 
-    public void loading(Label label, ProgressBar progressBar, Button generateReportBtn) {
+    private void loading(Label label, ProgressBar progressBar, Button reportBtn, Button generateReportBtn) {
         label.setManaged(true);
         label.setVisible(true);
         progressBar.setManaged(true);
         progressBar.setVisible(true);
+        reportBtn.setManaged(false);
+        reportBtn.setVisible(false);
         generateReportBtn.setManaged(false);
         generateReportBtn.setVisible(false);
     }
 
-    public void doneLoading(Label label, ProgressBar progressBar, Button generateReportBtn) {
+    private void doneLoading(Label label, ProgressBar progressBar, Button reportBtn, Button generateReportBtn) {
         label.setManaged(false);
         label.setVisible(false);
         progressBar.setManaged(false);
         progressBar.setVisible(false);
+        reportBtn.setVisible(true);
+        reportBtn.setManaged(true);
         generateReportBtn.setManaged(true);
         generateReportBtn.setVisible(true);
     }

@@ -93,36 +93,26 @@ public class Excel {
             createCell(
                     row,
                     0,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getRoute(),
                     cellStyle);
             createCell(
                     row,
                     1,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getZipCode(),
                     cellStyle);
             createCell(
                     row,
                     2,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getName(),
                     cellStyle);
             createCell(
                     row,
                     3,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getCity(),
                     cellStyle);
             createCell(
                     row,
                     4,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getStateCode(),
                     cellStyle);
 
@@ -131,8 +121,6 @@ public class Excel {
                 createCell(
                         row,
                         5,
-                        HorizontalAlignment.CENTER,
-                        VerticalAlignment.CENTER,
                         fordDealer.getWeather().getWeatherCode().getValue(),
                         cellStyle
                 );
@@ -142,8 +130,6 @@ public class Excel {
                 createCell(
                         row,
                         6,
-                        HorizontalAlignment.CENTER,
-                        VerticalAlignment.CENTER,
                         fordDealer.getWeather().getTemp().get(0).getMin().getValue().toString(),
                         cellStyle
                 );
@@ -152,8 +138,6 @@ public class Excel {
                 createCell(
                         row,
                         7,
-                        HorizontalAlignment.CENTER,
-                        VerticalAlignment.CENTER,
                         fordDealer.getWeather().getTemp().get(1).getMax().getValue().toString(),
                         cellStyle
                 );
@@ -162,8 +146,6 @@ public class Excel {
                 createCell(
                         row,
                         8,
-                        HorizontalAlignment.CENTER,
-                        VerticalAlignment.CENTER,
                         fordDealer.getWeather().getPrecipitation().get(0).getMax().getValue().toString(),
                         cellStyle
                 );
@@ -172,8 +154,6 @@ public class Excel {
                 createCell(
                         row,
                         9,
-                        HorizontalAlignment.CENTER,
-                        VerticalAlignment.CENTER,
                         fordDealer.getWeather().getPrecipitationAccumulation().getValue().toString(),
                         cellStyle
                 );
@@ -181,8 +161,6 @@ public class Excel {
                 createCell(
                         row,
                         5,
-                        HorizontalAlignment.CENTER,
-                        VerticalAlignment.CENTER,
                         "There was an issue requesting this data from ClimaCell weather API",
                         cellStyle
                 );
@@ -197,24 +175,18 @@ public class Excel {
         createCell(
                 row,
                 0,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Route Code",
                 cellStyle
         );
         createCell(
                 row,
                 1,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Zip Code",
                 cellStyle
         );
         createCell(
                 row,
                 2,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Dealer Name",
                 cellStyle
         );
@@ -222,56 +194,42 @@ public class Excel {
         createCell(
                 row,
                 3,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "City",
                 cellStyle
         );
         createCell(
                 row,
                 4,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "State",
                 cellStyle
         );
         createCell(
                 row,
                 5,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Weather Condition",
                 cellStyle
         );
         createCell(
                 row,
                 6,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Min Temp",
                 cellStyle
         );
         createCell(
                 row,
                 7,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Max Temp",
                 cellStyle
         );
         createCell(
                 row,
                 8,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Precipitation Expected",
                 cellStyle
         );
         createCell(
                 row,
                 9,
-                HorizontalAlignment.CENTER,
-                VerticalAlignment.CENTER,
                 "Precipitation Current",
                 cellStyle
         );
@@ -280,7 +238,6 @@ public class Excel {
 
     private static void setupWeatherReportSheet(HSSFWorkbook workbook, Sheet sheet, ArrayList<FordDealer> fordDealers) throws ExecutionException, InterruptedException {
 
-        // TODO Determine why CellStyle not correctly applying individual styles and setting all to H.center, V.center
         CellStyle cellStyle = workbook.createCellStyle();
         for (int i = 0; i < fordDealers.size(); i++) {
             FordDealer fordDealer = fordDealers.get(i);
@@ -292,82 +249,62 @@ public class Excel {
             createCell(
                     row,
                     0,
-                    HorizontalAlignment.RIGHT,
-                    VerticalAlignment.CENTER,
                     GenerateTime.getMMDDYYYYTimeNow(),
                     cellStyle
             );
             createCell(
                     row,
                     1,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     "F",
                     cellStyle);
             createCell(
                     row,
                     2,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getRoute(),
                     cellStyle);
             createCell(
                     row,
                     3,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getZipCode(),
                     cellStyle);
             createCell(
                     row,
                     4,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getName(),
                     cellStyle);
             createCell(
                     row,
                     5,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getCity(),
                     cellStyle);
             createCell(
                     row,
                     6,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getStateCode(),
                     cellStyle);
             createCell(
                     row,
                     7,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getActualTime(),
                     cellStyle);
             createCell(
                     row,
                     8,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     fordDealer.getExpectedTime(),
                     cellStyle);
             createCell(
                     row,
                     9,
-                    HorizontalAlignment.CENTER,
-                    VerticalAlignment.CENTER,
                     weatherReportInformation(fillColor),
                     cellStyle);
         }
     }
 
-    private static void createCell(Row row, int col, HorizontalAlignment HA, VerticalAlignment VA, String value, CellStyle cellStyle) {
+    private static void createCell(Row row, int col, String value, CellStyle cellStyle) {
         Cell cell = row.createCell(col);
         cell.setCellValue(value);
-        cellStyle.setAlignment(HA);
-        cellStyle.setVerticalAlignment(VA);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cell.setCellStyle(cellStyle);
     }
 
