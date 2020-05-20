@@ -9,7 +9,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.WorkbookUtil;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -60,9 +59,7 @@ public class Excel {
         try {
             setupWeatherReportSheet(workbook, weatherReport, fordDealers);
             setupWeatherReportDataSheet(workbook, weatherReportData, fordDealers);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
@@ -71,10 +68,12 @@ public class Excel {
             weatherReport.autoSizeColumn(i);
         }
 
-        try (OutputStream fileOut = new FileOutputStream("src/main/resources/ExcelFiles/Ford Weather Report.xls")) {
+        /*
+        When using getResource.getPath() it creates a path with %20 for all white space. .replaceAll() below is used to fix that
+         */
+        String resource = Excel.class.getClassLoader().getResource("ExcelFiles/Ford Weather Report.xls").getPath().replaceAll("%20", " ");
+        try (OutputStream fileOut = new FileOutputStream(resource)) {
             workbook.write(fileOut);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
@@ -59,11 +61,9 @@ public class ReportUI extends Application {
                 ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
                 for (int i = 0; i < fordDealers.size(); i++) {
                     FordDealer fordDealer = fordDealers.get(i);
-                    progressBar.setProgress(i/fordDealers.size());
+//                    progressBar.setProgress(i/fordDealers.size());
                     /*
-
                     TODO increment progress bar here
-
                      */
 
                     Callable<ClimaCell> dailyClimaData = new ClimaCellData(
@@ -77,13 +77,15 @@ public class ReportUI extends Application {
                     Future<ClimaCell> submit = executorService.submit(dailyClimaData);
                     try {
                         fordDealer.setWeather(submit.get());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
+                    } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
                 }
-                TimeTracker.saveCurrentExecutionTime();
+                try {
+                    TimeTracker.saveCurrentExecutionTime();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
                 Excel.generateNewWeatherTemplate(fordDealers);
             } else {
                 return false;
@@ -148,13 +150,15 @@ public class ReportUI extends Application {
         if (file != null) {
             if (file.exists()) {
                 try {
-                    File excelReport = new File("src/main/resources/ExcelFiles/Ford Weather Report.xls");
+                    URL resource = ReportUI.class.getClassLoader().getResource("ExcelFiles/Ford Weather Report.xls");
+                    assert resource != null;
+                    File excelReport = new File(resource.toURI());
                     if (excelReport == null) {
-                        alertBox(AlertType.WARNING, "The report you are trying to export does no exist. You must first generate a new report.", ButtonType.OK);
+                        Platform.runLater(()->alertBox(AlertType.WARNING, "The report you are trying to export does no exist. You must first generate a new report."));
                     } else {
                         FileUtils.copyFile(excelReport, new File(file.getPath() + "/Ford Weather Report.xls"));
                     }
-                } catch (IOException e) {
+                } catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
                 }
             }
@@ -168,9 +172,9 @@ public class ReportUI extends Application {
             loading(label, progressBar, reportBtn, generateReportBtn);
             boolean result = generateReport();
             if (result){
-                Platform.runLater(() -> alertBox(AlertType.CONFIRMATION, "The weather report was successfully generated. ", ButtonType.OK));
+                Platform.runLater(() -> alertBox(AlertType.CONFIRMATION, "The weather report was successfully generated. "));
             }else {
-                Platform.runLater(() -> alertBox(AlertType.ERROR, "It has been to soon since you generated a report. ", ButtonType.OK));
+                Platform.runLater(() -> alertBox(AlertType.ERROR, "It has been to soon since you generated a report. "));
             }
             doneLoading(label, progressBar, reportBtn, generateReportBtn);
         });
@@ -201,12 +205,11 @@ public class ReportUI extends Application {
         generateReportBtn.setVisible(true);
     }
 
-    private void alertBox(AlertType alertType, String info, ButtonType buttonType) {
-        Alert alert = new Alert(alertType, info, buttonType);
+    private void alertBox(AlertType alertType, String info) {
+        Alert alert = new Alert(alertType, info, ButtonType.OK);
         alert.setHeaderText(null);
         alert.setGraphic(null);
         alert.show();
-        return;
     }
 
     public ProgressBar getProgressBar() {
