@@ -37,10 +37,6 @@ public class ReportUI extends Application {
             solely for the purpose of not running the application when the rate limit
             has already been reached for an hour. 100 calls/hr x2 since there is 2 keys
              */
-        System.out.println(lastExecutionTime);
-        System.out.println(GenerateTime.getUnixTime());
-
-        System.out.println(GenerateTime.getUnixTime() - lastExecutionTime);
         if ((GenerateTime.getUnixTime() - lastExecutionTime) > 3600) {
             // Get all ford data from DealerInformation.csv
             ArrayList<FordDealer> fordDealers = FordDealerInformation.loadFordData();
@@ -161,10 +157,12 @@ public class ReportUI extends Application {
             if (result) {
                 Platform.runLater(() -> alertBox(AlertType.CONFIRMATION, "The weather report was successfully generated. "));
             } else {
+                // TODO give more information with this alert. Possibly a time they can next generate a report.
                 Platform.runLater(() -> alertBox(AlertType.ERROR, "It has been to soon since you generated a report. "));
             }
             doneLoading(label, progressBar, reportBtn, generateReportBtn);
         });
+
         // Don't allow this thread to prevent JVM shutdown
         thread.setDaemon(true);
         thread.start();
