@@ -10,6 +10,7 @@ import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class ClimaCellData implements Callable<ClimaCell> {
@@ -101,7 +102,7 @@ public class ClimaCellData implements Callable<ClimaCell> {
                 throw new IOException("Unexpected Response: " + response.toString());
             }
 
-            String temp1 = response.body().string();
+            String temp1 = Objects.requireNonNull(response.body()).string();
             /*
             Clima Cell Api is return an array and moshi-adapter is expecting an object. By removing the
             beginning and end characters we should be left with a Json Object.

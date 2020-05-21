@@ -50,10 +50,10 @@ public class Excel {
         );
 
         //Check if the name is safe to use
-        String weatherReportName = WorkbookUtil.createSafeSheetName("Weather Report");
+        final String weatherReportName = WorkbookUtil.createSafeSheetName("Weather Report");
         Sheet weatherReport = workbook.createSheet(weatherReportName);
 
-        String weatherReportDataName = WorkbookUtil.createSafeSheetName("Weather Report Data");
+        final String weatherReportDataName = WorkbookUtil.createSafeSheetName("Weather Report Data");
         Sheet weatherReportData = workbook.createSheet(weatherReportDataName);
 
         try {
@@ -71,13 +71,12 @@ public class Excel {
         /*
         When using getResource.getPath() it creates a path with %20 for all white space. .replaceAll() below is used to fix that
          */
-        String resource = Excel.class.getClassLoader().getResource("ExcelFiles/Ford Weather Report.xls").getPath().replaceAll("%20", " ");
+        final String resource = System.getProperty("user.dir") + "/Excel/Ford Weather Report.xls";
         try (OutputStream fileOut = new FileOutputStream(resource)) {
             workbook.write(fileOut);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /*
@@ -168,7 +167,7 @@ public class Excel {
     }
 
     private static void addWeatherReportDataSheetHeader(Sheet sheet, CellStyle cellStyle) {
-    // route code, zip code, city, state, weather condition, min temp, max temp, precipitation expected, precip accumulation
+        // route code, zip code, city, state, weather condition, min temp, max temp, precipitation expected, precip accumulation
 
         Row row = sheet.createRow(0);
         createCell(
