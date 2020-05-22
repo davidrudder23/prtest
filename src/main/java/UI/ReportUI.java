@@ -49,7 +49,12 @@ public class ReportUI extends Application {
                 RunTime.getRuntime().availableProcessors will return the number of processors a system
                 has available based on hardware.
                  */
-            ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), r -> {
+                // Creating daemon threads inside executor so they shutdown with javaFx application thread
+                Thread thread = Executors.defaultThreadFactory().newThread(r);
+                thread.setDaemon(true);
+                return thread;
+            });
 
             for (FordDealer fordDealer : fordDealers) {
                 Callable<ClimaCell> dailyClimaData = new ClimaCellData(
@@ -153,7 +158,6 @@ public class ReportUI extends Application {
         Thread thread = new Thread(() -> {
             loading(label, progressBar, reportBtn, generateReportBtn);
             boolean result = generateReport();
-            System.out.println(result);
             if (result) {
                 Platform.runLater(() -> alertBox(AlertType.CONFIRMATION, "The weather report was successfully generated. "));
             } else {
