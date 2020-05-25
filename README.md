@@ -12,9 +12,13 @@ Example of Generated Report:
 
 Languages/Libraries:
 - Java
-- [Apache POI]()
-- 
+- [Apache POI](https://poi.apache.org/)
+- [Moshi](https://github.com/square/moshi/)
+- [Okhttp](https://square.github.io/okhttp/)
+- [Apache Commons](https://commons.apache.org/)
 
 Technologies:
+- []()
+- []()
 
 ### Problems Faced
