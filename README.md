@@ -21,5 +21,3 @@ Technologies:
 - [Intellij Idea](https://www.jetbrains.com/idea/)
 - [Launch4j](http://launch4j.sourceforge.net/)
 - [Inno Setup](https://jrsoftware.org/isinfo.php)
-
-### Problems Faced
